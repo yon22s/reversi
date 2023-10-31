@@ -6,6 +6,7 @@ class Board:
             self.lst = board
         self.board_size = size
 
+
     def __getitem__(self, item) -> "list[int]":
         return self.lst[item]
         
@@ -46,6 +47,16 @@ class Board:
 
         return score
 
+
+    def get_basic_rate_for_move(self, i: int, j:int) -> float:
+        #TODO improve evaluation
+        if i == self.board_size-1 or i == 0 or j == self.board_size-1 or j == 0:
+            return 2
+        if i == self.board_size-2 or i == 1 or j == self.board_size-2 or j == 1:
+            return -2
+        return 0
+
+
     def get_rating(self, me: int, depth: int) -> float:
         if depth == 0:
             # base evaluation
@@ -58,13 +69,14 @@ class Board:
 
         for i, j in self.get_valid_moves(me):
             new_board = self.copy()
-            new_board.do_move(me, i, j)
-            current_eval = -new_board.get_rating(enemy, depth - 1)
+            current_eval = new_board.do_move(me, i, j)
+            current_eval += new_board.get_basic_rate_for_move(i, j) - new_board.get_rating(enemy, depth - 1) #TODO: improve
 
             if current_eval > max_eval:
                 max_eval = current_eval
 
         return max_eval
+
 
     def is_valid(self, me: int, i: int, j: int) -> bool:
         if self[i][j] != 0:
@@ -101,8 +113,10 @@ class Board:
         
         return moves
 
-    def do_move(self, me: int, i: int, j: int) -> None:
+
+    def do_move(self, me: int, i: int, j: int) -> int:
         enemy = 3 - me
+        score = 0
         self.lst[i][j] = me
         for di in range(-1, 2):
             for dj in range(-1, 2):
@@ -125,6 +139,8 @@ class Board:
                 
                 for tile in line:
                     self[tile[0]][tile[1]] = me
+                    score += 1
+        return score
 
         
 
@@ -139,18 +155,20 @@ def get_move(me: int, board: "list[list[int]] | Board"):
     
     if isinstance(board, list):
         board = Board(board, len(board))
-    dir1 = {}
+    rate_for_moves = {}
     max = float("-inf")
     valid_moves = board.get_valid_moves(me)
+    if len(valid_moves == 0):
+        return
     ret = valid_moves[0][0], valid_moves[0][1]
     
     for move in valid_moves:
         rate = board.rate_move(move[0], move[1], me)
-        dir1[move] = rate
+        rate_for_moves[move] = rate
                 
-    for key in dir1.keys():
-        if dir1[key] > max:
-            max = dir1[key]
+    for key in rate_for_moves.keys():
+        if rate_for_moves[key] > max:
+            max = rate_for_moves[key]
             ret = key
 
     
