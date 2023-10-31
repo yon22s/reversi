@@ -1,8 +1,7 @@
 class Board:
     def __init__(self, board: "list[list[int]] | None" = None, size: int = 8) -> None:
         if board is None:
-            self.lst = [[0 for x in range(8)] for y in range(3)] + [[0, 0, 0, 2, 1, 0, 0, 0]] + [
-                [0, 0, 0, 1, 2, 0, 0, 0]] + [[0 for x in range(8)] for y in range(3)]
+            self.lst = [[0 for x in range(8)] for y in range(3)] + [[0, 0, 0, 2, 1, 0, 0, 0]] + [[0, 0, 0, 1, 2, 0, 0, 0]] + [[0 for x in range(8)] for y in range(3)]
         else:
             self.lst = board
         self.board_size = size
@@ -63,8 +62,7 @@ class Board:
         for i, j in self.get_valid_moves(me):
             new_board = self.copy()
             current_eval = new_board.do_move(me, i, j)
-            current_eval += new_board.get_basic_rate_for_move(i, j) - new_board.get_rating(enemy,
-                                                                                           depth - 1)  # TODO: improve
+            current_eval += new_board.get_basic_rate_for_move(i, j) - new_board.get_rating(enemy, depth - 1)  # TODO: improve
 
             if current_eval > max_eval:
                 max_eval = current_eval
