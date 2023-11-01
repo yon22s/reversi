@@ -10,15 +10,17 @@ class Board:
         return self.lst[item]
 
     def __repr__(self) -> str:
-        ret = ""
-        for n in range(self.board_size):
-            ret += str(self.lst[n]) + "\n"
+        ret = "--" * 9 + "\n"
+        for i in range(self.board_size):
+            ret += "|" + "".join(map(lambda x: "  " if x == 0 else ("○ " if x == 1 else "● "), self[i])) + "|\n"
+        ret += "--" * 9
         return ret
 
     def __str__(self) -> str:
-        ret = ""
-        for n in range(self.board_size):
-            ret += str(self.lst[n]) + "\n"
+        ret = "--" * 9 + "\n"
+        for i in range(self.board_size):
+            ret += "|" + "".join(map(lambda x: "  " if x == 0 else ("○ " if x == 1 else "● "), self[i])) + "|\n"
+        ret += "--" * 9
         return ret
 
     def copy(self):
@@ -135,9 +137,8 @@ class Board:
 # A function to return your next move.
 # 'board' is a 8x8 int array, with 0 being an empty cell and 1,2 being you and the opponent,
 # determained by the input 'me'.
-def get_move(me: int, board: "list[list[int]] | Board"):
-    if isinstance(board, list):
-        board = Board(board, len(board))
+def get_move(me: int, board: "list[list[int]]"):
+    board = Board(board, len(board))
     rate_for_moves = {}
     max = float("-inf")
     valid_moves = board.get_valid_moves(me)
