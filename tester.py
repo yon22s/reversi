@@ -38,4 +38,5 @@ while turns != 60:
 
 print(f"bot1 average time: {round(bot1_total_time / bot1_total_moves, 4)}")
 print(f"bot2 average time: {round(bot2_total_time / bot2_total_moves, 4)}")
-print(f"score: {board.get_score(bot1_color)}")
+print(f"score bot1: {board.get_score(bot1_color)}")
+print(f"score bot2: {board.get_score(bot2_color)}")
